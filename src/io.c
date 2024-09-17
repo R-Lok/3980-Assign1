@@ -1,9 +1,9 @@
 #include "../include/io.h"
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h>
 
 ssize_t readFully(int fd, char *buffer, size_t count, int *err);
 ssize_t writeFully(int fd, char *buffer, size_t count, int *err);

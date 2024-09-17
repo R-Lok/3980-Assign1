@@ -53,5 +53,6 @@ int checkValidArgs(const char *filter, const char *input, const char *output)
     {
         return 1;
     }
+    // Add check for the value of filter;
     return 0;
 }
