@@ -2,18 +2,25 @@
 
 char upper_filter(char c)
 {
-    if(c >= 97 && c <= 122)
+    const int char_lowerBound      = 97;
+    const int char_upperbound      = 122;
+    const int upper_lower_distance = 32;
+
+    if(c >= char_lowerBound && c <= char_upperbound)
     {
-        return c - 32;
+        return (char)(c - upper_lower_distance);
     }
     return c;
 }
 
 char lower_filter(char c)
 {
-    if(c >= 65 && c <= 90)
+    const int upper_char_lowerBound = 65;
+    const int upper_char_upperBound = 90;
+    const int upper_lower_distance  = 32;
+    if(c >= upper_char_lowerBound && c <= upper_char_upperBound)
     {
-        return c + 32;
+        return (char)(c + upper_lower_distance);
     }
     return c;
 }

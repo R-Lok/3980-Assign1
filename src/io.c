@@ -6,21 +6,30 @@
 #include <unistd.h>
 
 ssize_t readFully(int fd, char *buffer, size_t count, int *err);
-ssize_t writeFully(int fd, char *buffer, size_t count, int *err);
+ssize_t writeFully(int fd, const char *buffer, size_t count, int *err);
 
 int processText(int inputFd, int outputFd, filter_func func)
 {
-    char buffer;
-    int  err = 0;
-    char filteredChar;
+    char    buffer;
+    int     err = 0;
+    char    transformedChar;
+    ssize_t readRes;
+    ssize_t writeRes;
 
-    ssize_t result = readFully(inputFd, &buffer, 1, &err);
-    if(result == -1)
+    readRes = readFully(inputFd, &buffer, 1, &err);
+    if(readRes == -1)
     {
-        fprintf(stderr, "Read error: %s (error num: %d)", strerror(err), err);
+        perror("Read error");
         return (EXIT_FAILURE);
     }
-    filteredChar = func(buffer);
+    transformedChar = func(buffer);
+    writeRes        = writeFully(outputFd, &transformedChar, 1, &err);
+    if(writeRes == -1)
+    {
+        perror("Write error");
+        return (EXIT_FAILURE);
+    }
+    return EXIT_SUCCESS;
 }
 
 ssize_t readFully(int fd, char *buffer, size_t count, int *err)
@@ -46,4 +55,25 @@ ssize_t readFully(int fd, char *buffer, size_t count, int *err)
         bytes_read += (size_t)result;
     }
     return (ssize_t)bytes_read;
+}
+
+ssize_t writeFully(int fd, const char *buffer, size_t count, int *err)
+{
+    size_t bytes_written = 0;
+
+    while(bytes_written < count)
+    {
+        ssize_t result = write(fd, buffer + bytes_written, count - bytes_written);
+        if(result == -1)
+        {
+            if(errno == EINTR)
+            {
+                continue;
+            }
+            *err = errno;
+            return -1;
+        }
+        bytes_written += (size_t)result;
+    }
+    return (ssize_t)bytes_written;
 }
