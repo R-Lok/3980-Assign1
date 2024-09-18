@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FILTERS_H
+#define FILTERS_H
 
 typedef char (*filter_func)(char);
 
@@ -9,3 +10,4 @@ char lower_filter(char);
 char null_filter(char);
 
 filter_func selectFilter(const char *filterString);
+#endif

@@ -478,3 +478,7 @@ supported_cxx_compilers.txt
 CMakeLists.txt
 
 build/
+
+#Ryan's own testing files
+input.txt
+output.txt

@@ -1,4 +1,5 @@
 #include "../include/io.h"
+#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,7 @@ int main(int argc, char **argv)
 
     if(checkValidArgs(filter, inputFile, outputFile))
     {
+        errno = EINVAL;
         perror("Please run the program through: ./build/assign1 -i <inputFileName> -o <outputFileName> -f <upper/lower/null>");
         exit(1);
     }
