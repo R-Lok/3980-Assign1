@@ -7,3 +7,5 @@ char upper_filter(char);
 char lower_filter(char);
 
 char null_filter(char);
+
+filter_func selectFilter(const char *filterString);

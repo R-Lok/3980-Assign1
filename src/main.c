@@ -1,16 +1,20 @@
 #include "../include/io.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-int checkValidArgs(const char *filter, const char *input, const char *output);
+int checkValidArgs(filter_func filter, const char *input, const char *output);
 
 int main(int argc, char **argv)
 {
     int         opt;
-    const char *filterMode = NULL;
+    filter_func filter     = NULL;
     const char *inputFile  = NULL;
     const char *outputFile = NULL;
+    int         inputFd;
+    int         outputFd;
+    const int   filePerms = 0644;
 
     while((opt = getopt(argc, argv, ":i:o:f:")) != -1)
     {
@@ -25,8 +29,8 @@ int main(int argc, char **argv)
                 printf("Output file: %s\n", outputFile);
                 break;
             case 'f':
-                filterMode = optarg;
-                printf("Filter option: %s\n", filterMode);
+                filter = selectFilter(optarg);
+                printf("Filter option: %s\n", optarg);
                 break;
             case ':':
                 perror("Required argument missing for an option");
@@ -37,21 +41,23 @@ int main(int argc, char **argv)
         }
     }
 
-    if(checkValidArgs(filterMode, inputFile, outputFile))
+    if(checkValidArgs(filter, inputFile, outputFile))
     {
         perror("Please run the program through: ./build/assign1 -i <inputFileName> -o <outputFileName> -f <upper/lower/null>");
         exit(1);
     }
+    inputFd  = open(inputFile, O_RDONLY | O_CLOEXEC);
+    outputFd = open(outputFile, O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, filePerms);
 
+    processText(inputFd, outputFd, filter);
     return EXIT_SUCCESS;
 }
 
-int checkValidArgs(const char *filter, const char *input, const char *output)
+int checkValidArgs(filter_func filter, const char *input, const char *output)
 {
     if(!filter || !input || !output)
     {
         return 1;
     }
-    // Add check for the value of filter;
     return 0;
 }

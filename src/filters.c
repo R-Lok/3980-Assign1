@@ -1,4 +1,5 @@
 #include "../include/filters.h"
+#include <string.h>
 
 char upper_filter(char c)
 {
@@ -28,4 +29,21 @@ char lower_filter(char c)
 char null_filter(char c)
 {
     return c;
+}
+
+filter_func selectFilter(const char *filterString)
+{
+    if(strcasecmp(filterString, "upper") == 0)
+    {
+        return upper_filter;
+    }
+    if(strcasecmp(filterString, "lower") == 0)
+    {
+        return lower_filter;
+    }
+    if(strcasecmp(filterString, "null") == 0)
+    {
+        return null_filter;
+    }
+    return NULL;
 }
