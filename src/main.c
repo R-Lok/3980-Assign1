@@ -7,8 +7,7 @@ int checkValidArgs(const char *filter, const char *input, const char *output);
 
 int main(int argc, char **argv)
 {
-    int opt;
-
+    int         opt;
     const char *filterMode = NULL;
     const char *inputFile  = NULL;
     const char *outputFile = NULL;
@@ -30,10 +29,10 @@ int main(int argc, char **argv)
                 printf("Filter option: %s\n", filterMode);
                 break;
             case ':':
-                printf("Required argument missing for option %c \n", optopt);
+                perror("Required argument missing for an option");
                 exit(1);
             default:
-                printf("This should not print - please check the code");
+                printf("Useless flag entered: %c", optopt);
                 break;
         }
     }
