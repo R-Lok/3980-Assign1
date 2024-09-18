@@ -14,20 +14,22 @@ int processText(int inputFd, int outputFd, filter_func func)
     int     err = 0;
     char    transformedChar;
     ssize_t readRes;
-    ssize_t writeRes;
 
-    readRes = readFully(inputFd, &buffer, 1, &err);
-    if(readRes == -1)
+    while((readRes = readFully(inputFd, &buffer, 1, &err)) != 0)
     {
-        perror("Read error");
-        return (EXIT_FAILURE);
-    }
-    transformedChar = func(buffer);
-    writeRes        = writeFully(outputFd, &transformedChar, 1, &err);
-    if(writeRes == -1)
-    {
-        perror("Write error");
-        return (EXIT_FAILURE);
+        ssize_t writeRes;
+        if(readRes == -1)
+        {
+            perror("Read error");
+            return (EXIT_FAILURE);
+        }
+        transformedChar = func(buffer);
+        writeRes        = writeFully(outputFd, &transformedChar, 1, &err);
+        if(writeRes == -1)
+        {
+            perror("Write error");
+            return (EXIT_FAILURE);
+        }
     }
     return EXIT_SUCCESS;
 }
