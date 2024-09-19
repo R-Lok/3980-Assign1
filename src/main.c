@@ -48,8 +48,20 @@ int main(int argc, char **argv)
         perror("Please run the program through: ./build/assign1 -i <inputFileName> -o <outputFileName> -f <upper/lower/null>");
         exit(1);
     }
-    inputFd  = open(inputFile, O_RDONLY | O_CLOEXEC);
+    inputFd = open(inputFile, O_RDONLY | O_CLOEXEC);
+    if(inputFd == -1)
+    {
+        perror("Error opening input file.");
+        return EXIT_FAILURE;
+    }
+
     outputFd = open(outputFile, O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, filePerms);
+    if(outputFd == -1)
+    {
+        perror("Error opening output file.");
+        close(inputFd);
+        return EXIT_FAILURE;
+    }
 
     processText(inputFd, outputFd, filter);
     return EXIT_SUCCESS;
