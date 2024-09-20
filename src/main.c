@@ -37,7 +37,7 @@ int main(int argc, char **argv)
                 perror("Required argument missing for an option");
                 exit(1);
             default:
-                printf("Useless flag entered: %c", optopt);
+                printf("Useless flag entered: %c\n", optopt);
                 break;
         }
     }
@@ -63,8 +63,20 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    processText(inputFd, outputFd, filter);
+    if(processText(inputFd, outputFd, filter) == -1)
+    {
+        perror("Write/Read error in processText()");
+        goto failure;
+    }
+
+    close(inputFd);
+    close(outputFd);
     return EXIT_SUCCESS;
+
+failure:
+    close(inputFd);
+    close(outputFd);
+    return EXIT_FAILURE;
 }
 
 int checkValidArgs(filter_func filter, const char *input, const char *output)
