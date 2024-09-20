@@ -69,13 +69,19 @@ int main(int argc, char **argv)
         goto failure;
     }
 
-    close(inputFd);
-    close(outputFd);
+    if(close(inputFd) == -1 || close(outputFd) == -1)
+    {
+        perror("error during closing of files");
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 
 failure:
-    close(inputFd);
-    close(outputFd);
+    if(close(inputFd) == -1 || close(outputFd) == -1)
+    {
+        perror("error during closing of files");
+        return EXIT_FAILURE;
+    }
     return EXIT_FAILURE;
 }
 
