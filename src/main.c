@@ -63,7 +63,7 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    if(processText(inputFd, outputFd, filter) == -1)
+    if(processText(inputFd, outputFd, filter) == EXIT_FAILURE)
     {
         perror("Write/Read error in processText()");
         goto failure;
