@@ -34,6 +34,7 @@ int main(int argc, char **argv)
                 printf("Filter option: %s\n", optarg);
                 break;
             case ':':
+                errno = EINVAL;
                 perror("Required argument missing for an option");
                 exit(1);
             default:
